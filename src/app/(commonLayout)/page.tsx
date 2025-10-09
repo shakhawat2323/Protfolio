@@ -9,20 +9,21 @@ import ContactSection from "@/components/ContactSection";
 
 
 export  default async  function Home() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs`, {
-    next:{
-      revalidate:30
-    }
-  });
-  const blog = await res.json();
+  // const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs`, {
+  //   next:{
+  //     revalidate:30
+  //   }
+  // });
+  // const blog = await res.json();
 
-  console.log(blog)
+
   return (
      <div className="text-2xl text-purple-900">
        <HeroSection/>
        <Skills/>
        <ProjectSection/>
-     <BlogSection blogs={blog?.data?.slice(0, 3) || []} />
+     <BlogSection  />
+     {/* <BlogSection blogs={blog?.data?.slice(0, 3) || []} /> */}
        
        <ContactSection/>
       
