@@ -13,14 +13,13 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import Logo from "../../public/img/shakhawat.png";
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Menu } from "lucide-react";
-import ReactIcon from "../../public/img/Rasingan.png";
 
 
 const navItems = [
@@ -48,7 +47,7 @@ export function Navbar() {
           {/* Brand Section */}
           <Link href="/" className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-400 shadow-lg overflow-hidden">
-              <Image src={Logo} alt="logo" width={50} height={50} />
+              <Image src="https://i.ibb.co.com/VpxzR1MR/shakhawat-1.png" alt="logo" width={50} height={50} />
             </div>
             <div className="flex flex-col leading-tight">
               <span className="font-semibold text-lg bg-gradient-to-r from-purple-400 via-pink-400 to-yellow-300 bg-clip-text text-transparent">
@@ -167,7 +166,7 @@ export function Navbar() {
               transition={{ repeat: Infinity, ease: "linear", duration: 15 }}
               className="flex items-center justify-center rounded-full "
             >
-              <Image src={ReactIcon} alt="React" width={40} height={40} />
+              <Image src="https://i.ibb.co.com/tT8fhhjW/Rasingan.png" alt="React" width={40} height={40} />
             </motion.div>
           </div>
         </div>

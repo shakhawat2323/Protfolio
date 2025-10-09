@@ -8,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import Background from "../../public/img/bakground.png";
 import Link from "next/link";
 
 export default function ContactSection() {
@@ -20,7 +19,7 @@ export default function ContactSection() {
       {/* 🔹 Background Image (Full Screen, No Overlay) */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src={Background}
+          src="https://i.ibb.co.com/SwRy580p/bakground.png"
           alt="Contact background"
           fill
           priority

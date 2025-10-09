@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
 import { motion } from "framer-motion";
-import Planets from "../../public/img/erth.png";
+
 const projects = [
   {
     title: "DevSphere (MERN)",
@@ -66,7 +66,7 @@ export default function ProjectSection() {
                     transition={{ repeat: Infinity, ease: "linear", duration: 13 }}
                     className="absolute z-50 hidden lg:block  lg:left-5 "
                   >
-                    <Image src={Planets} alt="React" width={70} height={70} />
+                    <Image src="https://i.ibb.co.com/YT2gS7yK/erth.png" alt="React" width={70} height={70} />
                   </motion.div>
 
       <div className="max-w-7xl mx-auto px-6 text-center relative z-10">

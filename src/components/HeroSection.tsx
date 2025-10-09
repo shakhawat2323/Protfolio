@@ -8,7 +8,7 @@ import { RetroGrid } from "./ui/retro-grid";
 import { OrbitingCircles } from "./ui/orbiting-circles";
 import { Typewriter } from "react-simple-typewriter";
 // import SplashCursor from "./nurui/splash-cursor";
-import Logo from "../../public/img/shakhawat.png"
+
 import { BackgroundBeamsWithCollision } from "./ui/background-beams-with-collision";
 import { Meteors } from "./ui/meteors";
 import Link from "next/link";
@@ -143,20 +143,22 @@ export default function HeroSection() {
         {/* Right Content (Profile + Orbit) */}
         <div className="relative flex-1 flex justify-center items-center">
           {/* Profile Image */}
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1 }}
+          <motion.div 
+            // initial={{ scale: 0.8, opacity: 0 }}
+            // animate={{ scale: 1, opacity: 1 }}
+            // transition={{ duration: 1 }}
             className="relative z-10"
           >
             <Image
-              src={Logo}
+              src="https://i.ibb.co.com/VpxzR1MR/shakhawat-1.png"
               alt="Profile"
               width={260}
               height={260}
               className="rounded-full border-4 border-lime-400 shadow-xl"
             />
           </motion.div>
+
+          
 
           {/* Orbiting Icons */}
 

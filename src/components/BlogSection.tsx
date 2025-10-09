@@ -1,6 +1,4 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import Image from "next/image";
@@ -9,142 +7,184 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const blogs = [
-  {
-    id: 1,
-    title: "Building a Modern Portfolio Website with Next.js & Prisma",
-    image: "https://example.com/blogs/nextjs-prisma.png",
-    author: "Super Admin",
-    authorImage: "https://cdn-icons-png.flaticon.com/512/2202/2202112.png",
-    date: "27-09-2020",
-    content:
-      "In this post, I’ll show you how to build a fast and SEO-friendly portfolio website using Next.js, Tailwind CSS, and Prisma ORM. You’ll learn how to structure your app, manage your database with Prisma, and deploy seamlessly to Vercel. We’ll also cover performance optimization, API integration, and image optimization strategies for modern web apps.",
-  },
-  {
-    id: 2,
-    title: "Designing Intuitive UI: Lessons from Real Projects",
-    image:
-      "https://cdn.dribbble.com/userupload/11053236/file/original-28a43eae2e7b401c.png",
-    author: "Super Admin",
-    authorImage: "https://cdn-icons-png.flaticon.com/512/2202/2202112.png",
-    date: "20-09-2020",
-    content:
-      "Designing intuitive UI means understanding how users think and behave. In this article, we’ll explore design psychology, consistency, and feedback loops. We’ll discuss real-world case studies and share actionable tips for making interfaces more human-centered and easier to use.",
-  },
-  {
-    id: 3,
-    title: "How to Avoid Common Mistakes in Web Design",
-    image:
-      "https://cdn.dribbble.com/users/52758/screenshots/11042347/media/22a1d7895ec7e734a0a02ebc1de9c6b7.png",
-    author: "Super Admin",
-    authorImage: "https://cdn-icons-png.flaticon.com/512/2202/2202112.png",
-    date: "18-09-2020",
-    content:
-      "Even experienced designers make mistakes—like cluttered layouts, poor color contrast, or ignoring accessibility. This post helps you identify and fix these problems early. You’ll also learn tools and techniques to validate your designs and ensure a clean, consistent visual hierarchy.",
-  },
-];
+interface BlogSectionProps {
+  blogs?: any[];
+  isPaginated?: boolean;
+}
 
-export default function BlogSection() {
+export default function BlogSection({ blogs = [], isPaginated = false }: BlogSectionProps) {
   const [open, setOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState<any>(null);
+
+  const [page, setPage] = useState(1);
+  const [paginatedBlogs, setPaginatedBlogs] = useState<any[]>(blogs);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 6,
+    total: 0,
+    totalPages: 1,
+  });
+
+  // ✅ Fetch blogs if pagination is enabled
+  useEffect(() => {
+    if (!isPaginated) return;
+
+    const fetchBlogs = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/blogs?page=${page}&limit=6`,
+          { cache: "no-store" }
+        );
+        const data = await res.json();
+        setPaginatedBlogs(data.data);
+        setPagination(data.pagination);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      }
+    };
+
+    fetchBlogs();
+  }, [page, isPaginated]);
 
   const handleOpen = (blog: any) => {
     setSelectedBlog(blog);
     setOpen(true);
   };
 
-  return (
-    <section className="relative py-20 px-6 md:px-16 text-white overflow-hidden bg-gradient-to-b from-[#0a0c15] via-[#0d101d] to-black [background-image:radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)]
-[background-size:4px_4px]">
-      {/* 🔹 Background pattern */}
-      <div className="absolute inset-0 opacity-[0.08] [background-image:radial-gradient(circle_at_center,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:40px_40px]" />
+  const displayBlogs = isPaginated ? paginatedBlogs : blogs;
 
+  return (
+    <section className="relative py-20 px-6 md:px-16 text-white overflow-hidden bg-gradient-to-b from-[#0a0c15] via-[#0d101d] to-black">
       {/* Header */}
-      <div className="relative z-10 text-center mb-14">
+      <div className="relative z-10 text-center mb-5">
         <h2 className="text-5xl font-extrabold text-gray-800/20 tracking-tight">
           LATEST NEWS
         </h2>
-        <h3 className="text-3xl font-semibold text-yellow-400 relative inline-block -mt-10">
+        <h3 className="text-3xl font-semibold text-yellow-400 relative inline-block -mt-5">
           BLOG
           <span className="block h-[2px] bg-yellow-400 w-14 mx-auto mt-2"></span>
         </h3>
       </div>
 
+            <motion.div
+                    aria-hidden
+                    role="img"
+                    title="React"
+                    initial={{ rotate: 0 }}
+                    animate={{ rotate: 360 }}
+                    transition={{ repeat: Infinity, ease: "linear", duration: 15 }}
+                     className="absolute right-5  top-5 "
+                  >
+                    <Image src="https://i.ibb.co.com/pBWC7Lxz/saringan5.png" alt="React" width={70} height={40} />
+                  </motion.div>
+
       {/* Blog Cards */}
       <div className="relative z-10 grid md:grid-cols-3 gap-10">
-        {blogs.map((blog, index) => (
-          <motion.div
-            key={blog.id}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.2 }}
-          >
-            <Card className="bg-[#111422]/80 backdrop-blur-md border border-gray-700 hover:border-yellow-400 transition-all duration-300 shadow-lg hover:shadow-yellow-500/10 rounded-2xl overflow-hidden group">
-              {/* Blog Image */}
-              <div className="relative w-full h-56 overflow-hidden">
-                <Image
-                  src={blog.image}
-                  alt={blog.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-              </div>
-
-              <CardContent className="p-6">
-                {/* Author info */}
-                <div className="flex items-center gap-3 mb-4">
+        {displayBlogs?.length > 0 ? (
+          displayBlogs.map((blog: any, index: number) => (
+            <motion.div
+              key={blog._id || blog.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <Card className="bg-[#111422]/80 backdrop-blur-md border border-gray-700 hover:border-yellow-400 transition-all duration-300 shadow-lg hover:shadow-yellow-500/10 rounded-2xl overflow-hidden group">
+                <div className="relative w-full h-56 overflow-hidden">
                   <Image
-                    src={blog.authorImage}
-                    alt={blog.author}
-                    width={32}
-                    height={32}
-                    className="rounded-full border border-yellow-400"
+                    src={blog.Image || "/default-blog.jpg"}
+                    alt={blog.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className="text-sm text-gray-400">
-                    By{" "}
-                    <span className="text-yellow-400 font-medium">
-                      {blog.author}
-                    </span>{" "}
-                    | <span>{blog.date}</span>
-                  </div>
                 </div>
 
-                {/* Title */}
-                <h4 className="text-lg font-semibold leading-snug mb-3 hover:text-yellow-400 transition-colors">
-                  {blog.title}
-                </h4>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Image
+                      src={blog.author?.image || "/default-avatar.png"}
+                      alt={blog.author?.name || "Author"}
+                      width={32}
+                      height={32}
+                      className="rounded-full border border-yellow-400"
+                    />
+                    <div className="text-sm text-gray-400">
+                      By{" "}
+                      <span className="text-yellow-400 font-medium">
+                        {blog.author?.name || "Unknown"}
+                      </span>{" "}
+                      |{" "}
+                      <span>
+                        {new Date(blog.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
 
-                {/* Summary */}
-                <p className="text-gray-400 text-sm mb-5 line-clamp-3">
-                  {blog.content}
-                </p>
+                  <h4 className="text-lg font-semibold leading-snug mb-3 hover:text-yellow-400 transition-colors">
+                    {blog.title}
+                  </h4>
 
-                {/* Read More Button */}
-                <Button
-                  variant="outline"
-                  className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black cursor-pointer font-semibold rounded-full transition-all duration-300"
-                  onClick={() => handleOpen(blog)}
-                >
-                  Read More →
-                </Button>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
+                  <p className="text-gray-400 text-sm mb-5 line-clamp-3">
+                    {blog.content}
+                  </p>
+
+                  <Button
+                    variant="outline"
+                    className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black rounded-full"
+                    onClick={() => handleOpen(blog)}
+                  >
+                    Read More →
+                  </Button>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))
+        ) : (
+          <p className="text-center text-gray-400 col-span-3">
+            No blogs available.
+          </p>
+        )}
       </div>
 
-      {/* More Blogs Button */}
-        <div className="text-center cursor-pointer mt-14 relative ">
-        <Link href="/blogs">
-            <button className="bg-yellow-400 cursor-pointer text-black font-semibold px-4 py-1 rounded-full hover:bg-yellow-300 transition-all duration-300">
-            More Blogs →
-            </button>
-        </Link>
-        </div>
+      {/* ✅ Pagination Controls */}
+      {isPaginated && (
+        <div className="flex justify-center mt-14 items-center gap-6">
+          <Button
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+            variant="outline"
+            className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black rounded-full"
+          >
+            ← Prev
+          </Button>
 
-   
+          <span className="text-gray-300 text-sm">
+            Page <span className="text-yellow-400">{pagination.page}</span> of{" "}
+            <span className="text-yellow-400">{pagination.totalPages}</span>
+          </span>
+
+          <Button
+            disabled={page === pagination.totalPages}
+            onClick={() => setPage((p) => p + 1)}
+            variant="outline"
+            className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black rounded-full"
+          >
+            Next →
+          </Button>
+        </div>
+      )}
+
+      {/* More Blogs Button (only Home) */}
+      {!isPaginated && (
+        <div className="text-center mt-14">
+          <Link href="/blogs">
+            <button className="bg-yellow-400 text-black font-semibold px-6 py-2 rounded-full hover:bg-yellow-300 transition-all">
+              More Blogs →
+            </button>
+          </Link>
+        </div>
+      )}
 
       {/* Dialog for Blog Details */}
       <Dialog open={open} onOpenChange={setOpen}>
@@ -159,7 +199,7 @@ export default function BlogSection() {
 
               <div className="relative w-full h-48 rounded-xl overflow-hidden my-4">
                 <Image
-                  src={selectedBlog.image}
+                  src={selectedBlog.Image || "/default-blog.jpg"}
                   alt={selectedBlog.title}
                   fill
                   className="object-cover"
@@ -168,8 +208,8 @@ export default function BlogSection() {
 
               <div className="flex items-center gap-3 mb-4">
                 <Image
-                  src={selectedBlog.authorImage}
-                  alt={selectedBlog.author}
+                  src={selectedBlog.author?.image || "/default-avatar.png"}
+                  alt={selectedBlog.author?.name}
                   width={35}
                   height={35}
                   className="rounded-full border border-yellow-400"
@@ -177,9 +217,12 @@ export default function BlogSection() {
                 <div className="text-sm text-gray-400">
                   By{" "}
                   <span className="text-yellow-400 font-medium">
-                    {selectedBlog.author}
+                    {selectedBlog.author?.name}
                   </span>{" "}
-                  | <span>{selectedBlog.date}</span>
+                  |{" "}
+                  <span>
+                    {new Date(selectedBlog.createdAt).toLocaleDateString()}
+                  </span>
                 </div>
               </div>
 

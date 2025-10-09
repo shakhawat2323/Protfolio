@@ -12,7 +12,7 @@ import {
   FaBrain,
   FaCertificate,
 } from "react-icons/fa";
-import Logo from "../../public/img/shakhawat-mona.png";
+
 
 export default function Aboutme() {
   return (
@@ -23,6 +23,18 @@ export default function Aboutme() {
       [background-image:radial-gradient(circle_at_center,rgba(255,255,255,0.05)_1px,transparent_1px)]
       [background-size:20px_20px] overflow-hidden"
     >
+
+            <motion.div
+             aria-hidden
+             role="img"
+             title="React"
+             initial={{ rotate: 0 }}
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, ease: "linear", duration: 15 }}
+                 className="absolute right-5  top-5 "
+                 >
+                  <Image src="https://i.ibb.co.com/SwvSXvXk/saringan6.png" alt="React" width={70} height={40} />
+                  </motion.div>
       <div className="max-w-7xl mx-auto space-y-20">
         {/* Header */}
         <motion.div
@@ -58,7 +70,7 @@ export default function Aboutme() {
             <div className="relative w-[320px] h-[420px] rounded-[2rem] overflow-hidden border border-slate-700 shadow-2xl">
               <div className="absolute inset-0 bg-gradient-to-b from-slate-800/70 via-slate-900/80 to-black/90 rounded-[2rem]" />
               <Image
-                src={Logo}
+                src="https://i.ibb.co.com/hFLVH9K0/shakhawat-mona.png"
                 alt="Profile"
                 width={400}
                 height={420}

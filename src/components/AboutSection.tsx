@@ -3,10 +3,8 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import ExperienceBadge from "./ExperienceBadge";
-import Logo from "../../public/img/shakhawat-mona.png";
+
 import Link from "next/link";
-import Roket from "../../public/img/about-roket.png";
-import Rsingan from "../../public/img/Infinity-Saringan.png";
 export default function AboutSection() {
   return (
     <section
@@ -14,6 +12,8 @@ export default function AboutSection() {
       className="relative py-20 px-6 md:px-16 bg-gradient-to-b from-slate-900  via-slate-900 to-black text-white    [background-image:radial-gradient(circle_at_center,rgba(255,255,255,0.05)_1px,transparent_1px)]
       [background-size:20px_20px]"
     >
+
+      
         <motion.div
   aria-hidden
   role="img"
@@ -32,7 +32,7 @@ export default function AboutSection() {
   className="absolute right-32 top-2 lg:right-17 lg:top-2 bottom-10 md:bottom-20"
 >
   <Image
-    src={Roket}
+    src="https://i.ibb.co.com/zVbRvPKM/about-roket.png"
     alt="Rocket"
     width={70}
     height={70}
@@ -49,8 +49,9 @@ export default function AboutSection() {
               transition={{ repeat: Infinity, ease: "linear", duration: 15 }}
                className="absolute left-5   -bottom-5 "
             >
-              <Image src={Rsingan} alt="React" width={70} height={40} />
+              <Image src="https://i.ibb.co.com/q3HgkKJZ/Infinity-Saringan.png" alt="React" width={70} height={40} />
             </motion.div>
+  
 
 
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
@@ -70,7 +71,7 @@ export default function AboutSection() {
 
               {/* Profile Image */}
               <Image
-                src={Logo}
+                src="https://i.ibb.co.com/hFLVH9K0/shakhawat-mona.png"
                 alt="Profile"
                 width={407}
                 height={420}

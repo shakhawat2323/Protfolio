@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Planents from "../../public/img/plenets.png";
+
 const skills = [
   { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
   { name: "Docker", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" },
@@ -71,7 +71,7 @@ export default function Skills() {
             className="absolute  z-50 right-13 top-17 lg:right-14 lg:top-7 bottom-10 md:bottom-20"
           >
             <Image
-              src={Planents}
+              src="https://i.ibb.co.com/dTgTfK0/plenets.png"
               alt="Rocket"
               width={70}
               height={70}

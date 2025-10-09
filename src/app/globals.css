@@ -191,9 +191,3 @@
     transform: translateY(40px);
   }
 }
-
-/* Animation speed dynamically controlled by CSS variable */
-.animate-grid {
-  animation: gridMove linear infinite;
-  animation-duration: calc(30s / var(--speed));
-}

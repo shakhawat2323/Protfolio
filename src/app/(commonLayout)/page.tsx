@@ -1,3 +1,4 @@
+
 import HeroSection from "@/components/HeroSection";
 import ProjectSection from "@/components/ProjectSection";
 import Skills from "@/components/Skills";
@@ -7,13 +8,22 @@ import ContactSection from "@/components/ContactSection";
 
 
 
-export default function Home() {
+export  default async  function Home() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs`, {
+    next:{
+      revalidate:30
+    }
+  });
+  const blog = await res.json();
+
+  console.log(blog)
   return (
      <div className="text-2xl text-purple-900">
        <HeroSection/>
        <Skills/>
        <ProjectSection/>
-       <BlogSection/>
+     <BlogSection blogs={blog?.data?.slice(0, 3) || []} />
+       
        <ContactSection/>
       
      </div>
