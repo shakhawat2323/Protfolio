@@ -1,91 +1,65 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 
 interface BlogSectionProps {
-  blogs?: any[];
-  isPaginated?: boolean;
+    isPaginated?: boolean;
+  blogs: any[];
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
-export default function BlogSection({ blogs = [], isPaginated = false }: BlogSectionProps) {
+export default function BlogSection({ blogs = [], pagination ,isPaginated = false}: BlogSectionProps) {
   const [open, setOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState<any>(null);
-
-  const [page, setPage] = useState(1);
-  const [paginatedBlogs, setPaginatedBlogs] = useState<any[]>(blogs);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 6,
-    total: 0,
-    totalPages: 1,
-  });
-
-  // ✅ Fetch blogs if pagination is enabled
-  useEffect(() => {
-    if (!isPaginated) return;
-
-    const fetchBlogs = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/blogs?page=${page}&limit=6`,
-          { cache: "no-store" }
-        );
-        const data = await res.json();
-        setPaginatedBlogs(data.data);
-        setPagination(data.pagination);
-      } catch (error) {
-        console.error("Error fetching blogs:", error);
-      }
-    };
-
-    fetchBlogs();
-  }, [page, isPaginated]);
+  const [page, setPage] = useState(pagination?.page || 1);
 
   const handleOpen = (blog: any) => {
     setSelectedBlog(blog);
     setOpen(true);
   };
 
-  const displayBlogs = isPaginated ? paginatedBlogs : blogs;
+  const handlePagination = async (newPage: number) => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs?page=${newPage}&limit=6`, {
+        cache: "no-store",
+      });
+      const data = await res.json();
+      // Client side pagination update
+      window.location.href = `/blogs?page=${newPage}`; // SSR page reload for SEO
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <section className="relative py-20 px-6 md:px-16 text-white overflow-hidden bg-gradient-to-b from-[#0a0c15] via-[#0d101d] to-black">
-      {/* Header */}
       <div className="relative z-10 text-center mb-5">
-        <h2 className="text-5xl font-extrabold text-gray-800/20 tracking-tight">
-          LATEST NEWS
-        </h2>
+        <h2 className="text-5xl font-extrabold text-gray-800/20 tracking-tight">LATEST NEWS</h2>
         <h3 className="text-3xl font-semibold text-yellow-400 relative inline-block -mt-5">
           BLOG
           <span className="block h-[2px] bg-yellow-400 w-14 mx-auto mt-2"></span>
         </h3>
       </div>
 
-            <motion.div
-                    aria-hidden
-                    role="img"
-                    title="React"
-                    initial={{ rotate: 0 }}
-                    animate={{ rotate: 360 }}
-                    transition={{ repeat: Infinity, ease: "linear", duration: 15 }}
-                     className="absolute right-5  top-5 "
-                  >
-                    <Image src="https://i.ibb.co.com/pBWC7Lxz/saringan5.png" alt="React" width={70} height={40} />
-                  </motion.div>
-
-      {/* Blog Cards */}
+      {/* Blog Grid */}
       <div className="relative z-10 grid md:grid-cols-3 gap-10">
-        {displayBlogs?.length > 0 ? (
-          displayBlogs.map((blog: any, index: number) => (
+        {blogs?.length > 0 ? (
+          blogs.map((blog: any, index: number) => (
             <motion.div
-              key={blog._id || blog.id}
+              key={blog.id || index}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
@@ -115,19 +89,18 @@ export default function BlogSection({ blogs = [], isPaginated = false }: BlogSec
                         {blog.author?.name || "Unknown"}
                       </span>{" "}
                       |{" "}
-                      <span>
-                        {new Date(blog.createdAt).toLocaleDateString()}
-                      </span>
+                      <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
                     </div>
                   </div>
 
-                  <h4 className="text-lg font-semibold leading-snug mb-3 hover:text-yellow-400 transition-colors">
+                  <h4
+                    className="text-lg font-semibold leading-snug mb-3 hover:text-yellow-400 transition-colors cursor-pointer"
+                    onClick={() => handleOpen(blog)}
+                  >
                     {blog.title}
                   </h4>
 
-                  <p className="text-gray-400 text-sm mb-5 line-clamp-3">
-                    {blog.content}
-                  </p>
+                  <p className="text-gray-400 text-sm mb-5 line-clamp-3">{blog.content}</p>
 
                   <Button
                     variant="outline"
@@ -141,18 +114,16 @@ export default function BlogSection({ blogs = [], isPaginated = false }: BlogSec
             </motion.div>
           ))
         ) : (
-          <p className="text-center text-gray-400 col-span-3">
-            No blogs available.
-          </p>
+          <p className="text-center text-gray-400 col-span-3">No blogs available.</p>
         )}
       </div>
 
       {/* ✅ Pagination Controls */}
-      {isPaginated && (
+      {pagination && pagination.totalPages > 1 && (
         <div className="flex justify-center mt-14 items-center gap-6">
           <Button
             disabled={page === 1}
-            onClick={() => setPage((p) => p - 1)}
+            onClick={() => handlePagination(page - 1)}
             variant="outline"
             className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black rounded-full"
           >
@@ -166,7 +137,7 @@ export default function BlogSection({ blogs = [], isPaginated = false }: BlogSec
 
           <Button
             disabled={page === pagination.totalPages}
-            onClick={() => setPage((p) => p + 1)}
+            onClick={() => handlePagination(page + 1)}
             variant="outline"
             className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black rounded-full"
           >
@@ -175,18 +146,18 @@ export default function BlogSection({ blogs = [], isPaginated = false }: BlogSec
         </div>
       )}
 
-      {/* More Blogs Button (only Home) */}
+            {/* 🔗 More Projects (Home Only) */}
       {!isPaginated && (
         <div className="text-center mt-14">
-          <Link href="/blogs">
+          <Link href="/projects">
             <button className="bg-yellow-400 text-black font-semibold px-6 py-2 rounded-full hover:bg-yellow-300 transition-all">
-              More Blogs →
+              More Blog →
             </button>
           </Link>
         </div>
       )}
 
-      {/* Dialog for Blog Details */}
+      {/* Blog Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-lg bg-[#10131f] border border-yellow-400/20 text-white rounded-2xl shadow-2xl overflow-hidden">
           {selectedBlog && (
@@ -206,29 +177,7 @@ export default function BlogSection({ blogs = [], isPaginated = false }: BlogSec
                 />
               </div>
 
-              <div className="flex items-center gap-3 mb-4">
-                <Image
-                  src={selectedBlog.author?.image || "/default-avatar.png"}
-                  alt={selectedBlog.author?.name}
-                  width={35}
-                  height={35}
-                  className="rounded-full border border-yellow-400"
-                />
-                <div className="text-sm text-gray-400">
-                  By{" "}
-                  <span className="text-yellow-400 font-medium">
-                    {selectedBlog.author?.name}
-                  </span>{" "}
-                  |{" "}
-                  <span>
-                    {new Date(selectedBlog.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-
-              <p className="text-gray-300 text-sm leading-relaxed">
-                {selectedBlog.content}
-              </p>
+              <p className="text-gray-300 text-sm leading-relaxed">{selectedBlog.content}</p>
             </>
           )}
         </DialogContent>

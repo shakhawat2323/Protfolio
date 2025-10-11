@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "raw.githubusercontent.com", // future-proof (for badges/logos)
+        hostname: "raw.githubusercontent.com", 
       },
     ],
   },

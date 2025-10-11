@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import ExperienceBadge from "./ExperienceBadge";
 
 import Link from "next/link";
-export default function AboutSection() {
+import ExperienceBadge from "./ExperienceBadge";
+export default function AboutSection({mymona}:any) {
   return (
     <section
       
@@ -84,7 +85,7 @@ export default function AboutSection() {
 
             {/* Floating Badge */}
             <div className="absolute lg:-right-20  lg:top-20 right-0 top-110 transform -translate-y-1/2 z-50">
-              <ExperienceBadge />
+              <ExperienceBadge mymona={mymona} />
             </div>
           </div>
         </motion.div>

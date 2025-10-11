@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { motion } from "framer-motion";
 
-export default function ExperienceBadge() {
+export default function ExperienceBadge({mymona}:{mymona:any}) {
   return (
     <div className="relative w-[160px] h-[160px] flex items-center justify-center">
       {/* Rotating Circular Text */}
@@ -30,7 +31,7 @@ export default function ExperienceBadge() {
 
       {/* Center Number */}
       <div className="relative z-10 text-center">
-        <p className="text-4xl font-extrabold text-lime-400">2+</p>
+        <p className="text-4xl font-extrabold text-lime-400">{mymona?.yearsOfExperience}+</p>
         <p className="text-xl text-white tracking-wider">Years</p>
       </div>
     </div>

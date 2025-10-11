@@ -1,19 +1,10 @@
-// import BlogSection from "@/components/BlogSection";
+import BlogSection from "@/components/BlogSection";
 
-export  default async function Blog() {
+// app/blogs/page.tsx
+export default async function BlogsPage({ searchParams }: { searchParams: { page?: string } }) {
+  const page = parseInt(searchParams.page || "1");
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs?page=${page}&limit=6`);
+  const data = await res.json();
 
-  // const data = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs`,{
-   
-  //   next:{
-  //     revalidate:30
-  //   }
-  // })
-  // const blog = await data.json()
-  // console.log(blog.data)
-  
-  return (
-    <div>
-    {/* <BlogSection blogs={blog?.data || []} isPaginated/> */}
-    </div>
-  );
+  return <BlogSection blogs={data.data} pagination={data.pagination} isPaginated />;
 }

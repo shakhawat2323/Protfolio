@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { motion } from "framer-motion";
@@ -14,7 +15,7 @@ import {
 } from "react-icons/fa";
 
 
-export default function Aboutme() {
+export default function Aboutme({data}:any) {
   return (
     <section
       id="about"
@@ -52,7 +53,7 @@ export default function Aboutme() {
             <span className="text-lime-500 font-semibold">
               MERN Stack Developer
             </span>{" "}
-            with 1.5 years of experience in building high-quality, responsive web
+            with {data?.yearsOfExperience} years of experience in building high-quality, responsive web
             applications that combine modern design with solid backend logic.
           </p>
         </motion.div>
@@ -92,7 +93,7 @@ export default function Aboutme() {
             </h3>
             <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
               A <span className="text-lime-500 font-semibold">MERN Stack Developer</span> with{" "}
-              <b>1.5 years</b> of freelance experience. I specialize in React, Next.js,
+              <b>{data?.yearsOfExperience} years</b> of freelance experience. I specialize in React, Next.js,
               Node.js & MongoDB, delivering smooth user experiences and clean backend APIs.
             </p>
             <p className="text-slate-600 dark:text-slate-400">
@@ -113,10 +114,10 @@ export default function Aboutme() {
           className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center"
         >
           {[
-            { label: "Years of Experience", value: "1.5+", icon: <FaAward /> },
-            { label: "Completed Projects", value: "20+", icon: <FaLaptopCode /> },
-            { label: "Happy Clients", value: "8+", icon: <FaGithub /> },
-            { label: "Technologies Mastered", value: "15+", icon: <FaUserGraduate /> },
+            { label: "Years of Experience", value: `${data?.yearsOfExperience}`, icon: <FaAward /> },
+            { label: "Completed Projects", value: `${data?.completedProjects}`, icon: <FaLaptopCode /> },
+            { label: "Happy Clients", value: `${data?.happyClients}`, icon: <FaGithub /> },
+            { label: "Technologies Mastered", value: `${data?.technologiesMastered}`, icon: <FaUserGraduate /> },
           ].map((item, i) => (
             <div
               key={i}
@@ -203,56 +204,48 @@ export default function Aboutme() {
 </section>
 
 
-        {/* 🎓 Certifications */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          viewport={{ once: true }}
-        >
-          <h3 className="text-3xl font-bold text-center text-lime-500 mb-10">
-            Certifications
-          </h3>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {[
-              {
-                title: "JavaScript (Advanced) Certificate",
-                org: "HackerRank",
-                date: "2024",
-              },
-              {
-                title: "Full Stack Open",
-                org: "University of Helsinki",
-                date: "2023",
-              },
-              {
-                title: "Frontend Development with React",
-                org: "Meta / Coursera",
-                date: "2023",
-              },
-              {
-                title: "Backend Development with Node.js",
-                org: "FreeCodeCamp",
-                date: "2024",
-              },
-            ].map((cert, i) => (
-              <div
-                key={i}
-                className="p-6 rounded-2xl bg-slate-100 dark:bg-slate-800 shadow-md hover:shadow-lime-500/20 transition"
-              >
-                <div className="flex items-center gap-3 mb-3 text-lime-500 text-2xl">
-                  <FaCertificate />
-                  <h4 className="text-xl font-bold">{cert.title}</h4>
-                </div>
-                <p className="text-slate-400">{cert.org}</p>
-                <p className="text-slate-500 dark:text-slate-300">
-                  Issued: {cert.date}
-                </p>
-              </div>
-            ))}
+    {/* 🎓 Certifications */}
+<motion.div
+  initial={{ opacity: 0, y: 40 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1 }}
+  viewport={{ once: true }}
+>
+  <h3 className="text-3xl font-bold text-center text-lime-500 mb-10">
+    Certifications
+  </h3>
+
+  <div className="grid md:grid-cols-2 gap-8">
+    {data?.certifications?.map((cert: any, i: number) => (
+      <div
+        key={i}
+        className="p-6 rounded-2xl bg-slate-100 dark:bg-slate-800 shadow-md hover:shadow-lime-500/20 transition"
+      >
+        <div className="flex items-center gap-3 mb-3 text-lime-500 text-2xl">
+          <FaCertificate />
+          <h4 className="text-xl font-bold">{cert.title}</h4>
+        </div>
+        <p className="text-slate-400">{cert.org}</p>
+        <p className="text-slate-500 dark:text-slate-300">
+          Issued: {cert.year}
+        </p>
+        {cert.image && (
+          <div className="mt-3">
+            <Image
+              src={cert.image}
+              alt={cert.title}
+              width={300}
+              height={90}
+              className="rounded-lg shadow-md"
+            />
           </div>
-        </motion.div>
+        )}
+      </div>
+    ))}
+  </div>
+</motion.div>
+
 
         {/* 🌐 Social Links */}
         <motion.div

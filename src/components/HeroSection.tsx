@@ -12,7 +12,7 @@ import { Typewriter } from "react-simple-typewriter";
 import { BackgroundBeamsWithCollision } from "./ui/background-beams-with-collision";
 import { Meteors } from "./ui/meteors";
 import Link from "next/link";
-import AboutSection from "./AboutSection";
+
 
 export default function HeroSection() {
   return (
@@ -176,7 +176,7 @@ export default function HeroSection() {
       </div>
   
     </BackgroundBeamsWithCollision>
-    <AboutSection/>
+   
      </div>
 
   );
