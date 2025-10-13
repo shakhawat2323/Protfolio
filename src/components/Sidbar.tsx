@@ -7,12 +7,15 @@ import {
   FileText,
   FolderKanban,
   User,
-  Award,
   Cpu,
   LogOut,
   Menu,
   X,
   ChevronDown,
+  Home,
+  Briefcase,
+  Info,
+  Mail,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -32,7 +35,6 @@ export default function Sidebar() {
       submenus: [
         { name: 'Blog Post', href: '/dashboard/blog/blogpost' },
         { name: 'All Blogs', href: '/dashboard/blog/allblogs' },
-
       ],
     },
     {
@@ -41,38 +43,30 @@ export default function Sidebar() {
       submenus: [
         { name: 'Project Post', href: '/dashboard/project/projectpost' },
         { name: 'All Projects', href: '/dashboard/project/allproject' },
- 
       ],
     },
     {
       name: 'About Me',
       icon: User,
       submenus: [
-        { name: 'GET About Me', href: '/dashboard/about/get' },
-        { name: 'POST Create About Me', href: '/dashboard/about/create' },
-        { name: 'PATCH Update About Me', href: '/dashboard/about/update' },
-      ],
-    },
-    {
-      name: 'Certifications',
-      icon: Award,
-      submenus: [
-        { name: 'GET All Certifications', href: '/dashboard/certifications/all' },
-        { name: 'POST New Certification', href: '/dashboard/certifications/create' },
-        { name: 'PATCH Update Certification', href: '/dashboard/certifications/update' },
-        { name: 'GET By ID', href: '/dashboard/certifications/id' },
-        { name: 'DEL Delete By ID', href: '/dashboard/certifications/delete' },
+        { name: 'Create About', href: '/dashboard/about/createabout' },
+        { name: 'About Me', href: '/dashboard/about/getabouts' },
       ],
     },
     {
       name: 'Technology',
       icon: Cpu,
       submenus: [
-        { name: 'POST Create Technology', href: '/dashboard/technology/create' },
-        { name: 'GET All Technologies', href: '/dashboard/technology/all' },
-        { name: 'GET Copy', href: '/dashboard/technology/copy' },
+        { name: 'Post Technology', href: '/dashboard/technology/posttechnology' },
       ],
     },
+
+    // === Main site pages ===
+    { name: 'Home', icon: Home, href: '/' },
+    { name: 'Projects', icon: Briefcase, href: '/projects' },
+    { name: 'About Me', icon: Info, href: '/about' },
+    { name: 'Blog', icon: FileText, href: '/blogs' },
+    { name: 'Contact', icon: Mail, href: '/contact' },
   ]
 
   return (

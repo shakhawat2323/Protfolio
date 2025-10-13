@@ -67,7 +67,7 @@ export default function BlogSection({ blogs = [], pagination ,isPaginated = fals
               <Card className="bg-[#111422]/80 backdrop-blur-md border border-gray-700 hover:border-yellow-400 transition-all duration-300 shadow-lg hover:shadow-yellow-500/10 rounded-2xl overflow-hidden group">
                 <div className="relative w-full h-56 overflow-hidden">
                   <Image
-                    src={blog.Image || "/default-blog.jpg"}
+                    src={blog.image || "/default-blog.jpg"}
                     alt={blog.title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-700"
@@ -170,7 +170,7 @@ export default function BlogSection({ blogs = [], pagination ,isPaginated = fals
 
               <div className="relative w-full h-48 rounded-xl overflow-hidden my-4">
                 <Image
-                  src={selectedBlog.Image || "/default-blog.jpg"}
+                  src={selectedBlog.image || "/default-blog.jpg"}
                   alt={selectedBlog.title}
                   fill
                   className="object-cover"

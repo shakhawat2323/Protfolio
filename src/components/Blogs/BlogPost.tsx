@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { useState } from 'react'
@@ -16,6 +17,8 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
+ import Form from 'next/form'
+import { createblog } from '@/actions/Blog/blog'
 
 export default function NewBlogPage() {
   const [form, setForm] = useState({
@@ -28,6 +31,8 @@ export default function NewBlogPage() {
 
   const [preview, setPreview] = useState('')
   const [loading, setLoading] = useState(false)
+// authorId defult velu
+  const a="12"
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -38,49 +43,17 @@ export default function NewBlogPage() {
     if (name === 'image') setPreview(value)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!form.title || !form.content) {
-      toast.error('⚠️ Please fill in all required fields')
-      return
-    }
-
-    try {
-      setLoading(true)
-      const res = await fetch('/api/blogs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      })
-
-      if (!res.ok) throw new Error('Failed to create blog')
-
-      toast.success('🎉 Blog created successfully!')
-      setForm({
-        title: '',
-        content: '',
-        image: '',
-        isPublished: false,
-        authorId: '',
-      })
-      setPreview('')
-    } catch (error) {
-      toast.error('❌ Something went wrong! Please try again.')
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
-  }
+ 
 
   return (
-    <div className="min-h-screen lg:min-w-screen flex items-center justify-center bg-gradient-to-br from-zinc-50 to-zinc-100 dark:from-zinc-900 dark:to-black px-10">
+    <div className="min-h-screen lg:min-w-screen flex items-center justify-center  px-10">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="w-full min-w-3xl "
       >
-        <Card className=" max-w-5/12 shadow-2xl border border-gray-200 dark:border-zinc-800 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md transition-all duration-300">
+        <Card className="w-[950px] shadow-2xl border border-gray-200 dark:border-zinc-800 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md transition-all duration-300">
           <CardHeader className="text-center pb-2 border-b border-gray-200 dark:border-zinc-800">
             <CardTitle className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight">
               ✍️ Create a New Blog 
@@ -88,7 +61,7 @@ export default function NewBlogPage() {
        
           </CardHeader>
 
-          <form onSubmit={handleSubmit}>
+          <Form action={createblog}>
             <CardContent className="space-y-6 p-6">
               {/* Title */}
               <div className="space-y-2">
@@ -134,7 +107,7 @@ export default function NewBlogPage() {
                   placeholder="https://example.com/image.jpg"
                   className="focus-visible:ring-purple-500 dark:bg-zinc-800 dark:text-gray-100"
                 />
-                {preview && (
+                {/* {preview && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -149,7 +122,7 @@ export default function NewBlogPage() {
                       className="rounded-xl border dark:border-zinc-700 shadow-lg object-cover"
                     />
                   </motion.div>
-                )}
+                )} */}
               </div>
 
               {/* Author ID */}
@@ -157,14 +130,13 @@ export default function NewBlogPage() {
                 <Label htmlFor="authorId" className="text-gray-700 dark:text-gray-200">
                   Author ID
                 </Label>
-                <Input
-                  id="authorId"
-                  name="authorId"
-                  value={form.authorId}
-                  onChange={handleChange}
-                  placeholder="Enter author ID"
-                  className="focus-visible:ring-purple-500 dark:bg-zinc-800 dark:text-gray-100"
-                />
+                              <Input
+                    id="authorId"
+                    name="authorId"
+                    defaultValue="1"
+                    readOnly
+                    className="cursor-not-allowed bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-gray-400 border-gray-300 dark:border-zinc-700"
+                  />
               </div>
 
               {/* Publish Toggle */}
@@ -194,7 +166,7 @@ export default function NewBlogPage() {
                 {loading ? 'Creating...' : 'Create Blog'}
               </Button>
             </CardFooter>
-          </form>
+          </Form>
         </Card>
       </motion.div>
     </div>

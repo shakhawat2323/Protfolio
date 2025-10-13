@@ -233,12 +233,14 @@ export default function Aboutme({data}:any) {
         {cert.image && (
           <div className="mt-3">
             <Image
-              src={cert.image}
-              alt={cert.title}
-              width={300}
-              height={90}
-              className="rounded-lg shadow-md"
-            />
+          src={cert.image.trim()}
+          alt={cert.title}
+          width={300}
+          height={200}
+          className="rounded-lg"
+          unoptimized
+        />
+
           </div>
         )}
       </div>

@@ -14,33 +14,48 @@ import {
   Calendar,
 } from "lucide-react";
 
-export default function Dashboard() {
-  const [data, setData] = useState({
-    blogs: 0,
-    projects: 0,
-    certifications: 0,
-    technologies: 0,
-  });
-  const [recentVisitors, setRecentVisitors] = useState(0);
+export default function Dashboard({alldata}:any) {
+ console.log(alldata,"mona")
+  const {
+    blogsdata,
+    projets,
+    certificationscount,
+    technologyscount,
+  } = alldata || {};
 
-  useEffect(() => {
-    setTimeout(() => {
-      setData({
-        blogs: 13,
-        projects: 10,
-        certifications: 5,
-        technologies: 15,
-      });
-      setRecentVisitors(Math.floor(Math.random() * 500 + 100));
-    }, 800);
-  }, []);
+
+  const projectsCount = Array.isArray(projets?.data)
+    ? projets.data.length
+    : 0;
+
 
   const stats = [
-    { label: "Total Blogs", value: data.blogs, icon: <FileText />, color: "from-blue-500 to-purple-600" },
-    { label: "Total Projects", value: data.projects, icon: <FolderGit2 />, color: "from-green-500 to-lime-600" },
-    { label: "Certifications", value: data.certifications, icon: <Award />, color: "from-yellow-500 to-orange-600" },
-    { label: "Technologies", value: data.technologies, icon: <Cpu />, color: "from-pink-500 to-red-600" },
+    {
+      label: "Total Blogs",
+      value: blogsdata ?? 0,
+      icon: <FileText />,
+      color: "from-blue-500 to-purple-600",
+    },
+    {
+      label: "Total Projects",
+      value: projectsCount,
+      icon: <FolderGit2 />,
+      color: "from-green-500 to-lime-600",
+    },
+    {
+      label: "Certifications",
+      value: certificationscount ?? 0,
+      icon: <Award />,
+      color: "from-yellow-500 to-orange-600",
+    },
+    {
+      label: "Technologies",
+      value: technologyscount ?? 0,
+      icon: <Cpu />,
+      color: "from-pink-500 to-red-600",
+    },
   ];
+
 
   return (
     <div className="flex-1 w-full min-h-screen overflow-y-auto bg-gradient-to-br from-[#0a001a] via-[#13002a] to-[#1e003f] text-white p-4 sm:p-6 md:p-8 lg:p-10">
@@ -83,7 +98,7 @@ export default function Dashboard() {
             <h2 className="text-base sm:text-xl font-semibold text-purple-300">Visitors</h2>
             <Users className="text-purple-400" />
           </div>
-          <p className="text-4xl sm:text-5xl font-bold text-lime-400">{recentVisitors}+</p>
+          <p className="text-4xl sm:text-5xl font-bold text-lime-400">500+</p>
           <p className="text-xs sm:text-sm text-gray-400 mt-2">Unique visitors this week</p>
         </motion.div>
 

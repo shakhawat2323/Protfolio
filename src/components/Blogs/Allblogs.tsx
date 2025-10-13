@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -32,93 +31,108 @@ interface Author {
 interface Blog {
   id: number;
   title: string;
-  Image: string;
+  image: string;
   content: string;
   isPublished: boolean;
   createdAt: string;
   author: Author;
 }
 
-export default function Allblogs() {
-  const [data, setData] = useState<Blog[]>([
-    {
-      id: 1,
-      title: "Next.js + Shadcn UI Dashboard",
-      Image: "https://i.ibb.co.com/pBC6Yb9P/logo45.jpg",
-      content: "A beautiful admin dashboard built with Next.js 14 and Shadcn UI.",
-      isPublished: true,
-      createdAt: "2025-10-05T12:00:00.000Z",
-      author: {
-        id: 1,
-        name: "Super Admin",
-        email: "admin@example.com",
-        image: "https://i.ibb.co.com/VpxzR1MR/shakhawat-1.png",
-        role: "ADMIN",
-      },
-    },
-    {
-      id: 2,
-      title: "Markdown Blog App",
-      Image: "https://i.ibb.co.com/q3HgkKJZ/Infinity-Saringan.png",
-      content: "Learn static site generation with Markdown in Next.js.",
-      isPublished: false,
-      createdAt: "2025-09-28T15:45:00.000Z",
-      author: {
-        id: 2,
-        name: "John Doe",
-        email: "john@example.com",
-        image: "https://i.ibb.co.com/5RhyR8h/avatar.png",
-        role: "EDITOR",
-      },
-    },
-  ]);
-
+export default function Allblogs({ datas }: any) {
+  const [data, setData] = useState<Blog[]>(datas?.data);
   const [open, setOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
+  const API_BASE = process.env.NEXT_PUBLIC_BASE_URL;
 
-  const handleDelete = (id: number) => {
+  // 🗑 DELETE blog from backend
+  const handleDelete = async (id: number) => {
     const confirmDelete = confirm("Are you sure you want to delete this blog?");
     if (!confirmDelete) return;
-    setData((prev) => prev.filter((b) => b.id !== id));
-    toast.success("🗑️ Blog deleted successfully!");
+
+    try {
+      const res = await fetch(`${API_BASE}/blogs/${id}`, {
+        method: "DELETE",
+      });
+      console.log(res)
+
+      if (!res.ok) {
+        toast.error("Failed to delete blog ❌");
+        return;
+      }
+
+      // Remove locally from UI
+      setData((prev) => prev.filter((b) => b.id !== id));
+      toast.success("🗑️ Blog deleted successfully!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Network error while deleting blog ❌");
+    }
   };
 
+  // ✏️ Open edit modal
   const handleUpdateClick = (blog: Blog) => {
     setSelectedBlog(blog);
     setOpen(true);
   };
 
+  // Local form state update
   const handleFormChange = (field: keyof Blog, value: any) => {
     setSelectedBlog((prev) => (prev ? { ...prev, [field]: value } : prev));
   };
 
-  const handleSave = () => {
+  // 💾 Save blog update (PUT/PATCH)
+  const handleSave = async () => {
     if (!selectedBlog) return;
 
-    setData((prev) =>
-      prev.map((b) => (b.id === selectedBlog.id ? selectedBlog : b))
-    );
+    try {
+      const res = await fetch(`${API_BASE}/blogs/${selectedBlog.id}`, {
+        method: "PATCH", // or PATCH depending on your backend
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: selectedBlog.title,
+          content: selectedBlog.content,
+          image: selectedBlog.image,
+          isPublished: selectedBlog.isPublished,
+          authorId: selectedBlog.author.id, // if needed by your backend
+        }),
+      });
 
-    toast.success("✅ Blog updated successfully!");
-    setOpen(false);
+      if (!res.ok) {
+        toast.error("Failed to update blog ❌");
+        return;
+      }
+
+      const updated = await res.json();
+
+
+      toast.success("✅ Blog updated successfully!");
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Network error while updating blog ❌");
+    }
   };
 
+  
+
   return (
-    <div className="min-h-screen w-full flex items-center justify-center px-6   relative">
+    <div className="min-h-screen w-full flex items-center justify-center px-6 relative">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="w-full "
       >
-        <Card className="border border-white/10 shadow-2xl backdrop-blur-xl  absolute top-5 w-[950px] bg-gradient-to-b from-zinc-900/70 to-black/50 rounded-3xl">
+        <Card className="border border-white/10 shadow-2xl backdrop-blur-xl absolute top-5 w-[950px] bg-gradient-to-b from-zinc-900/70 to-black/50 rounded-3xl">
           <CardHeader className="pb-6 text-center">
-            <h2 className="text-3xl font-extrabold bg-gradient-to-r from-lime-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-lg">
-              📚 All Blogs Management
-            </h2>
-            <p className="text-gray-400 text-sm mt-2">
-              Manage, edit and organize your blogs effortlessly
-            </p>
+            <div className="flex justify-center items-center gap-3">
+              <span className="text-2xl">📚</span>
+              <h2 className="text-3xl font-extrabold bg-gradient-to-r from-lime-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-lg">
+                All Blogs Management
+              </h2>
+            </div>
           </CardHeader>
 
           <CardContent>
@@ -146,7 +160,7 @@ export default function Allblogs() {
                     >
                       <TableCell className="text-center">
                         <Image
-                          src={blog.Image}
+                          src={blog.image}
                           alt={blog.title}
                           width={55}
                           height={35}
@@ -180,7 +194,7 @@ export default function Allblogs() {
 
                       <TableCell>
                         {blog.isPublished ? (
-                          <Badge className="bg-gradient-to-r from-green-500 to-emerald-400 text-white shadow-sm">
+                          <Badge className="bg-gradient-to-r from-green-500 shadow-sm">
                             Published
                           </Badge>
                         ) : (
@@ -219,7 +233,7 @@ export default function Allblogs() {
         </Card>
       </motion.div>
 
-      {/* 🧾 EDIT DIALOG */}
+      {/* ✏️ EDIT MODAL */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-lg bg-zinc-900/90 border border-zinc-800 text-gray-200">
           <DialogHeader>
@@ -242,8 +256,8 @@ export default function Allblogs() {
               <div>
                 <Label>Image URL</Label>
                 <Input
-                  value={selectedBlog.Image}
-                  onChange={(e) => handleFormChange("Image", e.target.value)}
+                  value={selectedBlog.image}
+                  onChange={(e) => handleFormChange("image", e.target.value)}
                   className="bg-zinc-800 border-zinc-700 text-gray-100"
                 />
               </div>
