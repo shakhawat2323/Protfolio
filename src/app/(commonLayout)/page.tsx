@@ -29,13 +29,20 @@ export  default async  function Home() {
     }
    })
    const mymona = await mona.json()
+     const technolog = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/technology`,{
+    next:{
+      revalidate:30
+    }
+   })
+   const skills = await technolog.json()
+
 
 
   return (
      <div className="text-2xl text-purple-900">
        <HeroSection/>
       <AboutSection mymona={mymona}/>
-       <Skills/>
+       <Skills skills={skills}/>
      <ProjectSection projects={firstThree} />
      <BlogSection blogs={blog?.data?.slice(0, 3) || []} />
        

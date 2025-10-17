@@ -20,6 +20,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Menu } from "lucide-react";
+import { getUserSession } from "@/helpers/getUserSession";
+import { useSession } from "next-auth/react";
 
 
 const navItems = [
@@ -30,8 +32,11 @@ const navItems = [
   { href: "/contact", label: "Contact" },
 ];
 
-export function Navbar() {
+export async function Navbar({session}:any) {
+
   const pathname = usePathname();
+  
+
 
   return (
     <div
@@ -42,6 +47,7 @@ export function Navbar() {
         "light:from-purple-100 light:via-pink-100 light:to-yellow-50 light:border-pink-200"
       )}
     >
+  
       <div className="container mx-auto px-4 md:px-3">
         <div className="flex h-16 items-center justify-between">
           {/* Brand Section */}
@@ -111,7 +117,9 @@ export function Navbar() {
                 size="sm"
                 className="bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-400 hover:opacity-90 text-slate-900"
               >
-                <Link href="/dashboard">Dashboard</Link>
+                {session?.user?.email && (
+            <Link href="/dashboard">Dashboard</Link>
+      )}
               </Button>
             </div>
 

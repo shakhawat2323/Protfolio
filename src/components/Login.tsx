@@ -3,21 +3,82 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+
+import { FieldValues, useForm } from "react-hook-form";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Card,
   CardContent,
-
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { signIn } from "next-auth/react";
+import { toast } from "sonner";
+import { login } from "@/actions/auth/auth";
+
+// ✅ Validation Schema
 
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+
+  // ✅ useForm Hook
+  const form = useForm<FieldValues>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  // const onSubmit = async (values: FieldValues) => {
+  //   try {
+  //     // const res = await login(values);
+  //     // console.log(values,"values")
+  //     // if (res?.id) {
+  //     //   toast.success("User Logged in Successfully");
+  //     // } else {
+  //     //   toast.error("User Login Failed");
+  //     // }
+  //     signIn("credentials", {
+  //       ...values
+  //     });
+  //     form.reset()
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+const onSubmit = async (values: FieldValues) => {
+  const res = await signIn("credentials", {
+    redirect: true,
+    email: values.email,
+    password: values.password,
+  
+  });
+  console.log(res,"res data")
+
+  if (res?.error) {
+    toast.error("Invalid email or password");
+  } else {
+    toast.success("Login successful!");
+    form.reset();
+    window.location.href = "/dashboard";
+  }
+};
+
+
+
+
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-[url('/img/background-blur.jpg')] bg-cover bg-center">
@@ -49,68 +110,87 @@ export default function Login() {
             <CardTitle className="text-2xl font-semibold">
               Welcome Back 👋
             </CardTitle>
-      
           </CardHeader>
 
           <CardContent>
-            <form className="space-y-5">
-              {/* Email */}
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail
-                    size={18}
-                    className="absolute left-3 top-3.5 text-gray-400"
-                  />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    required
-                    className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-gray-300 focus:ring-2 focus:ring-yellow-400"
-                  />
-                </div>
-              </div>
-
-              {/* Password */}
-              <div className="grid gap-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-      
-                </div>
-                <div className="relative">
-                  <Lock
-                    size={18}
-                    className="absolute left-3 top-3.5 text-gray-400"
-                  />
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    required
-                    className="pl-10 pr-10 bg-white/10 border-white/20 text-white placeholder:text-gray-300 focus:ring-2 focus:ring-yellow-400"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3.5 text-gray-300 hover:text-yellow-400"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                className="w-full mt-3 bg-yellow-400 text-black font-semibold rounded-full hover:bg-yellow-300 transition-all duration-300 py-2 text-lg shadow-lg hover:shadow-yellow-400/30"
+            {/* ✅ Shadcn Form */}
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-5"
               >
-                Login
-              </Button>
-            </form>
+                {/* Email */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Mail
+                            size={18}
+                            className="absolute left-3 top-3.5 text-gray-400"
+                          />
+                          <Input
+                            placeholder="you@example.com"
+                            {...field}
+                            className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-gray-300 focus:ring-2 focus:ring-yellow-400"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Password */}
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Lock
+                            size={18}
+                            className="absolute left-3 top-3.5 text-gray-400"
+                          />
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            {...field}
+                            className="pl-10 pr-10 bg-white/10 border-white/20 text-white placeholder:text-gray-300 focus:ring-2 focus:ring-yellow-400"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-3.5 text-gray-300 hover:text-yellow-400"
+                          >
+                            {showPassword ? (
+                              <EyeOff size={18} />
+                            ) : (
+                              <Eye size={18} />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Submit Button */}
+                <Button
+                  type="submit"
+                  className="w-full mt-3 bg-yellow-400 text-black font-semibold rounded-full hover:bg-yellow-300 transition-all duration-300 py-2 text-lg shadow-lg hover:shadow-yellow-400/30"
+                >
+                  Login
+                </Button>
+              </form>
+            </Form>
           </CardContent>
-
-
         </Card>
       </motion.div>
 

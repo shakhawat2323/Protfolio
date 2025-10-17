@@ -1,5 +1,5 @@
 import Dashboards from "@/components/Dashboard/Dashboards";
-
+import { getUserSession } from "@/helpers/getUserSession";
 
 export default async function Dashboard() {
    const aboutme = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/certifications`,{
@@ -27,7 +27,7 @@ const technologyscount = Array.isArray(technologys) ? technologys.length : techn
    const Aboutme = await aboutme.json()
    const certificationscount = Array.isArray(Aboutme) ? Aboutme.length : technologys.data?.length || 0;
  
-  
+   
     const alldata ={
       technologyscount,
       projets,
@@ -36,10 +36,17 @@ const technologyscount = Array.isArray(technologys) ? technologys.length : techn
 
     }
 
+
+   const session = await getUserSession();
+   console.log(session)
+
+
+
   return (
     <div>
 
       <Dashboards alldata={alldata}/>
+
     </div>
   );
 }

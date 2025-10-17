@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { FaGithub, FaLinkedin, FaFacebook, FaWhatsapp } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
@@ -8,8 +9,59 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import emailjs from "emailjs-com";
 
 export default function ContactSection() {
+  // ✅ Form Data State
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  // ✅ Loading & success states
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  // ✅ Input handler
+  const handleChange = (e:any) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // ✅ Submit handler (Send Email via EmailJS)
+  const handleSubmit = (e:any) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess(false);
+
+    // Replace with your actual EmailJS credentials
+    const serviceId = "service_4ipjxcg";
+    const templateId = "template_2dn9kf5";
+    const publicKey = "wgbAeHujHtgqFvWjm";
+
+    const templateParams = {
+      from_name: formData.name,
+      from_email: formData.email,
+      subject: formData.subject,
+      message: formData.message,
+      time: new Date().toLocaleString(),
+    };
+
+    emailjs
+      .send(serviceId, templateId, templateParams, publicKey)
+      .then(() => {
+        setSuccess(true);
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      })
+      .catch(() => {
+        setError("Failed to send message. Please try again.");
+      })
+      .finally(() => setLoading(false));
+  };
+
   return (
     <section
       id="contact"
@@ -48,27 +100,59 @@ export default function ContactSection() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h3 className="text-2xl md:text-3xl font-semibold mb-6">Just say Hello 👋</h3>
-            <form className="space-y-4 md:space-y-5">
+            <h3 className="text-2xl md:text-3xl font-semibold mb-6">
+              Just say Hello 👋
+            </h3>
+
+            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
               <Input
+                name="name"
                 placeholder="Your Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
                 className="bg-white/10 border border-white/20 text-white placeholder:text-gray-300 w-full rounded-lg px-4 py-3 focus:ring-yellow-400 focus:border-yellow-400 transition"
               />
               <Input
+                name="email"
                 type="email"
                 placeholder="Your Email"
+                value={formData.email}
+                onChange={handleChange}
+                required
                 className="bg-white/10 border border-white/20 text-white placeholder:text-gray-300 w-full rounded-lg px-4 py-3 focus:ring-yellow-400 focus:border-yellow-400 transition"
               />
               <Input
+                name="subject"
                 placeholder="Your Subject"
+                value={formData.subject}
+                onChange={handleChange}
+                required
                 className="bg-white/10 border border-white/20 text-white placeholder:text-gray-300 w-full rounded-lg px-4 py-3 focus:ring-yellow-400 focus:border-yellow-400 transition"
               />
               <Textarea
+                name="message"
                 placeholder="Your Message"
+                value={formData.message}
+                onChange={handleChange}
+                required
                 className="bg-white/10 border border-white/20 text-white placeholder:text-gray-300 w-full rounded-lg px-4 py-3 min-h-[130px] focus:ring-yellow-400 focus:border-yellow-400 transition"
               />
-              <Button className="w-full md:w-auto bg-yellow-400 text-black font-semibold rounded-full hover:bg-yellow-300 transition-all duration-300 px-8 py-3 text-lg shadow-lg hover:shadow-yellow-500/30">
-                Send Message
+
+              {/* ✅ Success/Error Messages */}
+              {success && (
+                <p className="text-green-400 text-sm">
+                  ✅ Message sent successfully!
+                </p>
+              )}
+              {error && <p className="text-red-400 text-sm">{error}</p>}
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full md:w-auto bg-yellow-400 text-black font-semibold rounded-full hover:bg-yellow-300 transition-all duration-300 px-8 py-3 text-lg shadow-lg hover:shadow-yellow-500/30"
+              >
+                {loading ? "Sending..." : "Send Message"}
               </Button>
             </form>
           </motion.div>
@@ -80,7 +164,9 @@ export default function ContactSection() {
             transition={{ duration: 0.6 }}
             className="flex flex-col justify-center"
           >
-            <h3 className="text-2xl md:text-3xl font-semibold mb-4">Contact Info</h3>
+            <h3 className="text-2xl md:text-3xl font-semibold mb-4">
+              Contact Info
+            </h3>
             <p className="text-gray-300 mb-6 leading-relaxed text-base md:text-lg">
               I’m always open to discussing new projects, creative ideas, or
               opportunities to be part of your vision. Let’s make something
@@ -92,15 +178,13 @@ export default function ContactSection() {
                 <Mail className="text-yellow-400" size={22} />
                 <p>shakhawathossain208@gmail.com</p>
               </div>
-
               <div className="flex items-center gap-3 md:gap-4">
                 <Phone className="text-yellow-400" size={22} />
                 <p>+8801749888203</p>
               </div>
-
               <div className="flex items-center gap-3 md:gap-4">
                 <MapPin className="text-yellow-400" size={22} />
-                <p>Dianjpur, Bangladesh</p>
+                <p>Dinajpur, Bangladesh</p>
               </div>
             </div>
 
@@ -119,7 +203,6 @@ export default function ContactSection() {
                 >
                   <FaGithub size={20} className="text-white" />
                 </Link>
-
                 <Link
                   href="https://linkedin.com/in/mdshakhawatislam23"
                   target="_blank"
@@ -128,7 +211,6 @@ export default function ContactSection() {
                 >
                   <FaLinkedin size={20} className="text-white" />
                 </Link>
-
                 <Link
                   href="https://facebook.com/shakhawat0226"
                   target="_blank"
@@ -137,7 +219,6 @@ export default function ContactSection() {
                 >
                   <FaFacebook size={20} className="text-white" />
                 </Link>
-
                 <Link
                   href="https://wa.me/8801749888203"
                   target="_blank"

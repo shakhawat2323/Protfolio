@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import emailjs from "emailjs-com";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { FaGithub, FaLinkedin, FaFacebook, FaWhatsapp } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
@@ -8,13 +10,52 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function ContactSections() {
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    emailjs
+      .send(
+        "service_4ipjxcg", // 🔹 Fake example ID
+        "template_2dn9kf5", // 🔹 Fake example template ID
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        },
+        "wgbAeHujHtgqFvWjm" // 🔹 Fake public key
+      )
+      .then(
+        () => {
+          toast.success("✅ Message sent successfully!");
+          setFormData({ name: "", email: "", subject: "", message: "" });
+        },
+        (error) => {
+          console.error(error);
+            toast.error("❌ Failed to send message. Please try again later.");
+        }
+      )
+      .finally(() => setLoading(false));
+  };
+
   return (
-    <section
-      id="contact"
-      className="relative py-20 px-6 md:px-16 text-white overflow-hidden"
-    >
+    <section id="contact" className="relative py-20 px-6 md:px-16 text-white overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 -z-10">
         <Image
@@ -33,16 +74,16 @@ export default function ContactSections() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center text-3xl md:text-4xl font-bold mb-16 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
+          className="text-center text-3xl md:text-4xl font-bold mb-16"
         >
           <span className="text-yellow-400 border-b-4 border-yellow-400 pb-1">
             CONTACT ME
           </span>
         </motion.h2>
 
-        {/* Main Grid: Form + Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 backdrop-blur-sm bg-black/20 p-6 md:p-10 rounded-2xl border border-white/10 shadow-2xl">
-          {/* Form */}
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 bg-black/20 p-6 md:p-10 rounded-2xl border border-white/10 shadow-2xl">
+          {/* Form Section */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -51,31 +92,47 @@ export default function ContactSections() {
             <h3 className="text-2xl md:text-3xl font-semibold mb-6">
               Just say Hello 👋
             </h3>
-            <form className="space-y-4 md:space-y-5">
+
+            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
               <Input
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Your Name"
-                className="bg-white/10 border border-white/20 text-white placeholder:text-gray-300 w-full rounded-lg px-4 py-3 focus:ring-yellow-400 focus:border-yellow-400 transition"
+                required
               />
               <Input
+                name="email"
                 type="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Your Email"
-                className="bg-white/10 border border-white/20 text-white placeholder:text-gray-300 w-full rounded-lg px-4 py-3 focus:ring-yellow-400 focus:border-yellow-400 transition"
+                required
               />
               <Input
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
                 placeholder="Your Subject"
-                className="bg-white/10 border border-white/20 text-white placeholder:text-gray-300 w-full rounded-lg px-4 py-3 focus:ring-yellow-400 focus:border-yellow-400 transition"
               />
               <Textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
                 placeholder="Your Message"
-                className="bg-white/10 border border-white/20 text-white placeholder:text-gray-300 w-full rounded-lg px-4 py-3 min-h-[130px] focus:ring-yellow-400 focus:border-yellow-400 transition"
+                required
               />
-              <Button className="w-full md:w-auto bg-yellow-400 text-black font-semibold rounded-full hover:bg-yellow-300 transition-all duration-300 px-8 py-3 text-lg shadow-lg hover:shadow-yellow-500/30">
-                Send Message
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full md:w-auto bg-yellow-400 text-black font-semibold rounded-full hover:bg-yellow-300 transition-all duration-300 px-8 py-3 text-lg shadow-lg hover:shadow-yellow-500/30"
+              >
+                {loading ? "Sending..." : "Send Message"}
               </Button>
             </form>
           </motion.div>
 
-          {/* Contact Info */}
+          {/* Contact Info Section */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -166,7 +223,10 @@ export default function ContactSections() {
             { title: "Freelance Status", desc: "Available on Fiverr & Upwork" },
             { title: "Time Zone", desc: "GMT +6 (Bangladesh)" },
           ].map((item, index) => (
-            <div key={index} className="p-4 bg-white/5 rounded-lg hover:bg-yellow-500/10 transition">
+            <div
+              key={index}
+              className="p-4 bg-white/5 rounded-lg hover:bg-yellow-500/10 transition"
+            >
               <h4 className="font-semibold text-yellow-400">{item.title}</h4>
               <p className="text-sm mt-2">{item.desc}</p>
             </div>
