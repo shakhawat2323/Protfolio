@@ -18,6 +18,7 @@ import {
   Mail,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { signOut } from 'next-auth/react'
 
 export default function Sidebar() {
   const [open, setOpen] = useState(true)
@@ -27,6 +28,9 @@ export default function Sidebar() {
     setActiveMenu(activeMenu === menuName ? null : menuName)
   }
 
+    const handleLogout = async () => {
+      await signOut({ callbackUrl: "/" }); 
+    };
   const menus = [
     { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
     {
@@ -171,9 +175,9 @@ export default function Sidebar() {
 
       {/* Bottom Logout Section */}
       <div className="border-t border-gray-800 pt-4">
-        <button className="flex items-center gap-3 p-3 rounded-lg hover:bg-red-500/20 text-red-400 hover:text-red-300 transition w-full">
+        <button onClick={handleLogout} className="flex items-center gap-3 p-3 rounded-lg hover:bg-red-500/20 text-red-400 hover:text-red-300 transition w-full">
           <LogOut className="h-5 w-5" />
-          {open && <span className="font-medium">Logout</span>}
+          {open && <span className="font-medium ">Logout</span>}
         </button>
       </div>
     </div>

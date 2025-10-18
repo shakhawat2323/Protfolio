@@ -129,8 +129,9 @@ export default function HeroSection() {
           {/* Download CV */}
           <div className="flex gap-5  justify-center md:justify-start ">
             <motion.a
-                        href="/cv.pdf"
+                        href="https://drive.google.com/file/d/1DWTaXVToXHoXg2mrPnhjWXEJqXZIXOoJ/view?usp=drive_link"
                         download
+                         target="_blank"
                         whileHover={{ scale: 1.05 }}
                         className="mt-8 inline-flex items-center gap-2 px-6 py-3 z-50 bg-lime-400 text-black font-semibold rounded-full shadow-lg hover:shadow-lime-500/50 transition"
                     >

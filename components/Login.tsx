@@ -58,22 +58,12 @@ export default function Login() {
   //     console.error(err);
   //   }
   // };
-const onSubmit = async (values: FieldValues) => {
-  const res = await signIn("credentials", {
-    redirect: true,
-    email: values.email,
-    password: values.password,
+const onSubmit =  (values: FieldValues) => {
+  signIn("credentials", {
+    ...values,
+  callbackUrl:"/dashboard"
   
   });
-  console.log(res,"res data")
-
-  if (res?.error) {
-    toast.error("Invalid email or password");
-  } else {
-    toast.success("Login successful!");
-    form.reset();
-    window.location.href = "/dashboard";
-  }
 };
 
 
