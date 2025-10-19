@@ -57,13 +57,13 @@ This system includes both Admin Dashboard and Public Portfolio View, making it p
 # 1️⃣ Clone the repository
 
 ```http
-git clone https://github.com/your-username/portfolio-server.git
+https://github.com/shakhawat2323/Protfolio.git
 ```
 
 # 2️⃣ Navigate into folder
 
 ```http
-cd portfolio-server
+cd Protfolio
 ```
 
 # 3️⃣ Install dependencies
