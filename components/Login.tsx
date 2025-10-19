@@ -26,11 +26,13 @@ import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { login } from "@/actions/auth/auth";
+import { redirect, useRouter } from "next/navigation";
 
-// ✅ Validation Schema
+
 
 
 export default function Login() {
+    const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   // ✅ useForm Hook
@@ -41,30 +43,23 @@ export default function Login() {
     },
   });
 
-  // const onSubmit = async (values: FieldValues) => {
-  //   try {
-  //     // const res = await login(values);
-  //     // console.log(values,"values")
-  //     // if (res?.id) {
-  //     //   toast.success("User Logged in Successfully");
-  //     // } else {
-  //     //   toast.error("User Login Failed");
-  //     // }
-  //     signIn("credentials", {
-  //       ...values
-  //     });
-  //     form.reset()
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-const onSubmit =  (values: FieldValues) => {
-  signIn("credentials", {
-    ...values,
-  callbackUrl:"/dashboard"
-  
-  });
-};
+  const onSubmit = async (values: FieldValues) => {
+    try {
+      const res = await login(values);
+    
+      if (res?.data?.id) {
+        
+        toast.success("User Logged in Successfully");
+        router.push("/dashboard");
+      } else {
+        toast.error("User Login Failed");
+      }
+   
+      form.reset()
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
 
 

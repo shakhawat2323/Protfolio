@@ -1,15 +1,18 @@
 
 import Footer from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import { getUserSession } from "@/helpers/getUserSession";
+import { getUserFromToken } from "@/helpers/getUserFromToken";
+
 
 
 import React from "react";
 
 
 export default async function CommonLayout({children}:{children:React.ReactNode}) {
- const session = await getUserSession();
- console.log(session)
+
+  const session = await getUserFromToken();
+ 
+
   return (
     <div>
        <Navbar session={session}/>

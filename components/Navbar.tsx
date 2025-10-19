@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/popover";
 import { Menu } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import LogoutButton from "./LogoutButton";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -35,9 +36,7 @@ export function Navbar({session}:any) {
   const pathname = usePathname();
 
 
-  const handleLogout = async () => {
-    await signOut({ callbackUrl: "/" }); 
-  };
+
 
   return (
     <div
@@ -106,7 +105,7 @@ export function Navbar({session}:any) {
           <div className="flex items-center gap-3">
             {/* Desktop Buttons */}
             <div className="hidden md:flex gap-2">
-              {!session?.user?.email ? (
+              {!session?.email ? (
                 <Button
                   asChild
                   variant="outline"
@@ -124,14 +123,7 @@ export function Navbar({session}:any) {
                   >
                     <Link href="/dashboard">Dashboard</Link>
                   </Button>
-                  <Button
-                    onClick={handleLogout}
-                    size="sm"
-                    variant="outline"
-                    className="border-red-400 text-red-400 hover:bg-red-400 hover:text-slate-900"
-                  >
-                    Logout
-                  </Button>
+                <LogoutButton/>
                 </>
               )}
             </div>
@@ -174,7 +166,7 @@ export function Navbar({session}:any) {
                     })}
 
                     {/* Mobile SignIn / Logout buttons */}
-                    {!session?.user?.email ? (
+                    {!session?.email ? (
                       <NavigationMenuItem className="w-full mt-2">
                         <Button
                           asChild
@@ -194,13 +186,14 @@ export function Navbar({session}:any) {
                           </Button>
                         </NavigationMenuItem>
                         <NavigationMenuItem className="w-full mt-1">
-                          <Button
+                          {/* <Button
                             onClick={handleLogout}
                             className="w-full border-red-400 text-red-400 hover:bg-red-400 hover:text-slate-900"
                             variant="outline"
                           >
                             Logout
-                          </Button>
+                          </Button> */}
+                           <LogoutButton/>
                         </NavigationMenuItem>
                       </>
                     )}

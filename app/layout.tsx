@@ -29,7 +29,7 @@ export default function RootLayout({
       <body
         className={` antialiased relative bg-[#0A122A] text-white`}
       >
-        {/* Background Effects (Client Component) */}
+      
         
 
         {/* Main Content */}

@@ -19,26 +19,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import Image from "next/image";
-
-interface Author {
-  id: number;
-  name: string;
-  email: string;
-  image: string;
-  role: string;
+import { Blog } from "@/types";
+interface AllBlogsProps {
+  datas: {
+    data: Blog[];
+  };
 }
 
-interface Blog {
-  id: number;
-  title: string;
-  image: string;
-  content: string;
-  isPublished: boolean;
-  createdAt: string;
-  author: Author;
-}
 
-export default function Allblogs({ datas }: any) {
+export default function Allblogs({ datas }:AllBlogsProps) {
   const [data, setData] = useState<Blog[]>(datas?.data);
   const [open, setOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
@@ -77,7 +66,7 @@ export default function Allblogs({ datas }: any) {
 
   // Local form state update
   const handleFormChange = (field: keyof Blog, value: any) => {
-    setSelectedBlog((prev) => (prev ? { ...prev, [field]: value } : prev));
+    setSelectedBlog((prev: any) => (prev ? { ...prev, [field]: value } : prev));
   };
 
   // 💾 Save blog update (PUT/PATCH)

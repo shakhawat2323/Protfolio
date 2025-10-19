@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
-import Image from 'next/image'
+
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
  import Form from 'next/form'
@@ -107,22 +107,7 @@ export default function NewBlogPage() {
                   placeholder="https://example.com/image.jpg"
                   className="focus-visible:ring-purple-500 dark:bg-zinc-800 dark:text-gray-100"
                 />
-                {/* {preview && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4 }}
-                    className="mt-3 flex justify-center"
-                  >
-                    <Image
-                      src={preview}
-                      alt="Preview"
-                      width={400}
-                      height={250}
-                      className="rounded-xl border dark:border-zinc-700 shadow-lg object-cover"
-                    />
-                  </motion.div>
-                )} */}
+
               </div>
 
               {/* Author ID */}

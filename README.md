@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧑‍💻 Shakhawat Portfolio System
 
-## Getting Started
+A **Full-Stack Personal Portfolio** System built with Next.js (Frontend) and Express.js (Backend) — featuring dynamic content management for blogs, projects, skills, and about sections.
 
-First, run the development server:
+This system includes both Admin Dashboard and Public Portfolio View, making it perfect for developers who want full control over their personal site.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## ✨ Features
+
+- 🔑 **⚡ Next.js (TypeScript) with Tailwind CSS & App Router**
+- 🛡 **Role-based Authorization**
+- 👛 **ISR (Incremental Static Regeneration) for Blogs Projects**
+- 💸 **🔐 Owner Dashboard — create, update, delete blogs & projects**
+- 📜 **📱 Fully Responsive UI (ShadCN + Tailwind components)**
+- 👑 **Admin Controls**: Blog Create , Post,
+- 📧 **✨ Rich UX: modals, skeleton loading, Framer Motion animations, react-hot-toast notifications**
+
+---
+
+## 🚀 Live Demo
+
+🔗 **Live API**: [Protfolio](https://protfolio-mona.vercel.app)
+
+---
+
+## 🛠 Tech Stack
+
+| Layer      | Technology              |
+| ---------- | ----------------------- |
+| Backend    | Node.js, Express.js     |
+| Language   | TypeScript              |
+| Database   | PostgreSQL + Prisma ORM |
+| Validation | Zod                     |
+| Auth       | JWT + Next-auth         |
+| Deployment | Vercel                  |
+| Tools      | Postman, VS Code,       |
+
+---
+
+## 📌 API Endpoints
+
+### 🏠 Root
+
+| Method | Endpoint | Description      |
+| ------ | -------- | ---------------- |
+| GET    | `/`      | API Health Check |
+
+---
+
+## 📝 Example Request
+
+## 📌 User Registration API
+
+- Route
+
+# 1️⃣ Clone the repository
+
+```http
+git clone https://github.com/your-username/portfolio-server.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# 2️⃣ Navigate into folder
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```http
+cd portfolio-server
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# 3️⃣ Install dependencies
 
-## Learn More
+```http
+pnpm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+# 4️⃣ Setup environment variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```http
+cp .env.example .env
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# 5️⃣ Run Prisma migrations
 
-## Deploy on Vercel
+```http
+pnpm prisma migrate dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# 6️⃣ Start the server
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```http
+pnpm run dev
+```

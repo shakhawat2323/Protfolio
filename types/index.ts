@@ -7,13 +7,31 @@ export interface Certification {
   aboutMeId: number;
 }
 
-export interface AboutMe {
+export interface PortfolioStats {
   id: number;
-  technologiesMastered: number;
-  happyClients: number;
   completedProjects: number;
+  happyClients: number;
+  technologiesMastered: number;
   yearsOfExperience: number;
+  certifications: Certification[];
   createdAt: string;
   updatedAt: string;
-  certifications: Certification[];
+}
+export interface Blog {
+  id: number;
+  title: string;
+  image: string;
+  content: string;
+  isPublished: boolean;
+  publishedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  authorId: number;
+  author: {
+    image: string;
+    id: number;
+    name: string;
+    email: string;
+    role?: string;
+  };
 }

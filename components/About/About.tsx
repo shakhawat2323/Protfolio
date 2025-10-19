@@ -3,9 +3,15 @@
 import { createOrUpdateAboutMe } from "@/actions/Blog/about";
 import Form from "next/form";
 import Certification from "./Certification";
+import { PortfolioStats } from "@/types";
 
-export default function About({data}:any) {
-  console.log(data)
+interface AboutProps {
+  data: PortfolioStats; 
+}
+
+
+export default function About({data}:AboutProps) {
+  console.log(data,"data")
   return (
     <div className="w-full p-8 ">
       <h2 className="text-3xl font-semibold mb-8 text-gray-900 dark:text-gray-100">
